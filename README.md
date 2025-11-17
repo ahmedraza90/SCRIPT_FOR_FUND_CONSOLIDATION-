@@ -1,5 +1,6 @@
 COMPLETE PROCESS:
 
+```text
 ├─ PHASE 1: Wallet Creation
 │   └─ Run: npm run create-wallets
 │       └─ Output: wallets.json with 5 wallet addresses
