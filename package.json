@@ -1,0 +1,21 @@
+{
+    "name": "my-javascript-project",
+    "version": "1.0.0",
+    "description": "A JavaScript project demonstrating basic structure and functionality.",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "node src/index.js",
+        "create-wallets": "node src/createWallets.js",
+        "distribute": "node src/getfund.js",
+        "consolidate": "node src/consolidateFunds.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "ethers": "^6.9.0",
+        "dotenv": "^16.3.1"
+    },
+    "devDependencies": {}
+}
