@@ -1,25 +1,25 @@
 COMPLETE PROCESS:
-│
+
 ├─ PHASE 1: Wallet Creation
 │   └─ Run: npm run create-wallets
 │       └─ Output: wallets.json with 5 wallet addresses
-│
+
 ├─ PHASE 2: Funding (Manual)
 │   └─ Visit faucet websites
 │       └─ Request test ETH for each address
 │           └─ Wait for confirmations (~1-5 minutes)
-│
+
 └─ PHASE 3: Consolidation
     └─ Run: npm run consolidate
         └─ Output: All funds → Main wallet address
 
-
-
+--------------------------------------------------------
 WALLET CREATION:
+
 START
 ├─ INPUT: count (number of wallets to create, default = 5)
 ├─ INITIALIZE: empty array 'wallets'
-│
+
 ├─ FOR i = 0 to count-1:
 │   ├─ GENERATE: Random Ethereum wallet using ethers.Wallet.createRandom()
 │   │   ├─ Creates private key (256-bit random number)
@@ -34,20 +34,19 @@ START
 │   │   └─ mnemonic: wallet.mnemonic.phrase
 │   │
 │   └─ DISPLAY wallet info to console
-│
+
 ├─ WRITE wallets array to 'wallets.json' file (JSON format)
 ├─ DISPLAY success message
 ├─ DISPLAY next steps instructions
 └─ RETURN: wallets array
 END
 
-
-
+--------------------------------------------------------
 SEND FUNDS:
+
 START distributeFunds(amountPerWallet = "0.01")
 
 ├─ PHASE 1: LOAD & INITIALIZE
-│   │
 │   ├─ STEP 1: Load Configuration
 │   │   ├─ READ wallets.json file
 │   │   ├─ PARSE JSON → array of wallet objects
@@ -67,16 +66,13 @@ START distributeFunds(amountPerWallet = "0.01")
 │       ├─ QUERY blockchain for wallet balance
 │       ├─ DISPLAY wallet address
 │       └─ DISPLAY current balance in ETH
-│
+
 ├─ PHASE 2: CALCULATE & VALIDATE
-│   │
 │   ├─ STEP 5: Parse Amount
 │   │   └─ CONVERT amountPerWallet string to Wei (ethers.parseEther)
-│   │       Example: "0.01" → 10000000000000000 Wei
 │   │
 │   ├─ STEP 6: Calculate Total Required
-│   │   └─ FORMULA: totalRequired = amountToSend × number of wallets
-│   │       Example: 0.01 ETH × 5 wallets = 0.05 ETH
+│   │   └─ totalRequired = amountToSend × number of wallets
 │   │
 │   ├─ STEP 7: Display Distribution Plan
 │   │   ├─ Amount per wallet
@@ -88,20 +84,16 @@ START distributeFunds(amountPerWallet = "0.01")
 │       │   ├─ DISPLAY error message
 │       │   └─ EXIT function
 │       └─ ELSE: CONTINUE
-│
+
 ├─ PHASE 3: EXECUTE DISTRIBUTION (LOOP)
-│   │
 │   └─ FOR EACH walletData in wallets array:
-│       │
 │       ├─ STEP 9: Create Transaction Object
 │       │   ├─ to: recipient wallet address
-│       │   ├─ value: amountToSend (in Wei)
-│       │   └─ (gasLimit auto-calculated by ethers.js)
+│       │   └─ value: amountToSend
 │       │
 │       ├─ STEP 10: Sign & Send Transaction
-│       │   ├─ Sign transaction with main wallet private key
-│       │   ├─ BROADCAST to network via RPC
-│       │   └─ RECEIVE transaction hash
+│       │   ├─ Sign with main wallet private key
+│       │   └─ BROADCAST via RPC, get tx hash
 │       │
 │       ├─ STEP 11: Display Transaction Info
 │       │   ├─ Wallet index
@@ -110,81 +102,42 @@ START distributeFunds(amountPerWallet = "0.01")
 │       │   └─ Amount sent
 │       │
 │       ├─ STEP 12: Wait for Confirmation
-│       │   ├─ CALL tx.wait()
-│       │   ├─ WAIT for transaction to be mined
-│       │   ├─ GET receipt with block number
-│       │   └─ DISPLAY confirmation
+│       │   └─ tx.wait() → display receipt
 │       │
 │       └─ ERROR HANDLING:
-│           └─ IF transaction fails:
-│               ├─ CATCH error
-│               ├─ DISPLAY error message
-│               └─ CONTINUE to next wallet
-│
+│           └─ IF transaction fails → display error & continue
+
 ├─ PHASE 4: FINALIZATION
-│   │
 │   ├─ STEP 13: Check Final Balance
-│   │   └─ QUERY main wallet balance again
-│   │
-│   ├─ STEP 14: Display Summary
-│   │   ├─ "Distribution complete"
-│   │   ├─ Remaining balance
-│   │   └─ Next step instructions
-│   │
-│   └─ ERROR HANDLING:
-│       └─ CATCH any errors → DISPLAY error message
-│
+│   ├─ STEP 14: Display Summary (remaining balance & instructions)
+│   └─ ERROR HANDLING: Catch & display errors
 └─ END
 
-
+--------------------------------------------------------
 CONSOLIDATING FUNDS:
+
 START
 ├─ LOAD configuration:
-│   ├─ READ wallets.json file → parse JSON
-│   ├─ READ .env file → get MAIN_WALLET_ADDRESS
-│   └─ READ .env file → get RPC_URL
-│
-├─ VALIDATE:
-│   └─ IF MAIN_WALLET_ADDRESS is empty → THROW ERROR
-│
-├─ CONNECT to Ethereum network:
-│   └─ CREATE JsonRpcProvider with RPC_URL
-│
+│   ├─ READ wallets.json → parse JSON
+│   ├─ READ MAIN_WALLET_ADDRESS from .env
+│   └─ READ RPC_URL from .env
+
+├─ VALIDATE: IF MAIN_WALLET_ADDRESS empty → THROW ERROR
+├─ CONNECT to Ethereum network via JsonRpcProvider
+
 ├─ FOR EACH wallet in wallets array:
-│   │
-│   ├─ STEP 1: Load Wallet
-│   │   ├─ CREATE wallet instance from privateKey
-│   │   └─ CONNECT wallet to provider
-│   │
+│   ├─ STEP 1: Load Wallet (from privateKey) & connect
 │   ├─ STEP 2: Check Balance
-│   │   └─ GET current balance of wallet address
-│   │
 │   ├─ STEP 3: Calculate Transfer Amount
 │   │   ├─ IF balance > 0:
-│   │   │   ├─ GET current gas price (feeData)
-│   │   │   ├─ CALCULATE gas cost = gasLimit (21000) × gasPrice
-│   │   │   ├─ CALCULATE amountToSend = balance - gasCost
-│   │   │   │
-│   │   │   ├─ IF amountToSend > 0:
-│   │   │   │   ├─ STEP 4: Create Transaction
-│   │   │   │   │   ├─ to: mainAddress
-│   │   │   │   │   ├─ value: amountToSend
-│   │   │   │   │   └─ gasLimit: 21000
-│   │   │   │   │
-│   │   │   │   ├─ STEP 5: Send Transaction
-│   │   │   │   │   └─ BROADCAST transaction to network
-│   │   │   │   │
-│   │   │   │   ├─ STEP 6: Wait for Confirmation
-│   │   │   │   │   └─ WAIT for transaction to be mined
-│   │   │   │   │
-│   │   │   │   └─ DISPLAY success message
-│   │   │   │
-│   │   │   └─ ELSE: DISPLAY "Insufficient balance for gas"
-│   │   │
-│   │   └─ ELSE: DISPLAY "No balance to transfer"
-│   │
+│   │   │   ├─ Get gas price (feeData)
+│   │   │   ├─ Calculate gasCost = gasLimit × gasPrice
+│   │   │   ├─ amountToSend = balance - gasCost
+│   │   │   └─ IF amountToSend > 0 → STEP 4-6: create/send tx, wait confirmation, display success
+│   │   │   └─ ELSE: display "Insufficient balance for gas"
+│   │   └─ ELSE: display "No balance to transfer"
 │   └─ CONTINUE to next wallet
-│
+
 ├─ DISPLAY "Consolidation complete"
-└─ CATCH any errors → DISPLAY error message
+└─ CATCH any errors → display error message
 END
