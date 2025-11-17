@@ -18,18 +18,26 @@ npm run consolidate
 COMPLETE PROCESS:
 
 ```text
+│
 ├─ PHASE 1: Wallet Creation
 │   └─ Run: npm run create-wallets
 │       └─ Output: wallets.json with 5 wallet addresses
-
-├─ PHASE 2: Funding (Manual)
-│   └─ Visit faucet websites
-│       └─ Request test ETH for each address
-│           └─ Wait for confirmations (~1-5 minutes)
-
-└─ PHASE 3: Consolidation
+│       └─ Each wallet has: address, privateKey, mnemonic
+│
+├─ PHASE 2: Fund Distribution (Automated) 
+│   ├─ Prerequisites:
+│   │   ├─ Add MAIN_WALLET_PRIVATE_KEY to .env
+│   │   └─ Get Sepolia ETH for main wallet from faucet
+│   │       └─ Visit: https://sepoliafaucet.com/
+│   │
+│   └─ Run: npm run distribute
+│       ├─ Sends faucet from main wallet to each generated wallet
+│       └─ Wait for confirmations (~1-2 minutes)
+│
+└─ PHASE 3: Fund Consolidation
     └─ Run: npm run consolidate
-        └─ Output: All funds → Main wallet address
+        ├─ Collects all funds from generated wallets
+        └─ Output: All funds → MAIN_WALLET_ADDRESS
 
 --------------------------------------------------------
 WALLET CREATION:
