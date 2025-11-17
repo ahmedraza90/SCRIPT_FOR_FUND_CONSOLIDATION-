@@ -2,18 +2,17 @@ Ethereum Wallet Management
 
 
 A simple tool to create multiple wallets, distribute funds, and consolidate them back.
+
 Quick Start
-bash# 1. Create wallets
+1. Create wallets
 npm run create-wallets
 
-# 2. Fund wallets manually via faucet
-# Visit Sepolia faucet and send ETH to each address
-
-# 3. Distribute funds from main wallet
+3. Distribute funds from main wallet
 npm run distribute
 
-# 4. Consolidate all funds back to main wallet
+4. Consolidate all funds back to main wallet
 npm run consolidate
+
 COMPLETE PROCESS:
 
 ```text
