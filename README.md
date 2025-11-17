@@ -1,6 +1,6 @@
 Ethereum Wallet Management
 
-```text
+
 A simple tool to create multiple wallets, distribute funds, and consolidate them back.
 Quick Start
 bash# 1. Create wallets
@@ -16,7 +16,7 @@ npm run distribute
 npm run consolidate
 COMPLETE PROCESS:
 
-
+```text
 ├─ PHASE 1: Wallet Creation
 │   └─ Run: npm run create-wallets
 │       └─ Output: wallets.json with 5 wallet addresses
